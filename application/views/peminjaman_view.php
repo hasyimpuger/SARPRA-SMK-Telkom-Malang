@@ -1,0 +1,85 @@
+<br><div class="row">
+				
+	                  <div class="col-md-12">
+	                  	  <div class="content-panel">
+	                  	  	  <h4><i class="fa fa-file"></i> Data Peminjaman
+						<div class="btn-group btncls">
+						  <button type="button" class="btn btn-theme dropdown-toggle" data-toggle="dropdown">
+						  <span class="fa fa-gears"></span><span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu dropdown-menu dropdown-menu-right">
+						    <li><a href="<?php echo base_url();?>index.php/admin/peminjaman/verifikasi.html">Data Verifikasi</a></li>
+						    <li><a href="<?php echo base_url();?>index.php/admin/peminjaman.html">Data Belum Verifikasi</a></li>
+						    <li class="divider"></li>
+						    <li><a href="#">Cetak</a></li>
+						  </ul>
+
+					  </h4>
+					  
+	                  	  	  <hr>
+		                      <table class="table">
+		                          <thead>
+		                          <tr>
+		                              <th>No. </th>
+		                              <th>Nama Peminjam</th>
+		                              <th>Nama Barang</th>
+		                              <th>Tanggal Peminjaman</th>
+		                              <th>Tanggal Pengembalian</th>
+		                              <th>Status</th>
+		                              <th>Action</th>
+		                          </tr>
+		                          </thead>
+		                          <tbody>
+<?php
+$no = 1;
+foreach ($hasil as $data):
+?>
+		                          <tr>
+		                                 <td> <?php echo $no; ?> </td>
+						 <td> <?php echo $data->NAMA_USER; ?> </td>
+ 						 <td> <?php echo $data->NAMA_BARANG; ?> </td>
+						 <td> <?php echo $data->TGL_PEMINJAMAN; ?> </td>
+						 <td> <?php echo $data->TGL_PENGEMBALIAN; ?> </td>
+						 <td> <?php if($data->STATUS == 3){ echo "<span class='label label-danger'>".$data->NAMA_STATUS."</span>"; }else { echo "<span class='label label-success'>".$data->NAMA_STATUS."</span>"; }?> </td>
+<?php if($data->STATUS == 3){?>
+		                               <td>
+						  <form action="<?php echo base_url(); ?>index.php/admin/peminjaman/confirm/<?php echo $data->ID; ?>" method="POST">
+						 <input class="hidden" type="text" name="barang" value="<?php echo $data->ID_BARANG?>">
+				                 <button class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fa fa-check"></i></button></form>
+						  <a href="<?php echo base_url(); ?>index.php/admin/user/pesan/<?php echo $data->USER; ?>"><button class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Pesan"><i class="fa fa-envelope-o"></i></button></a>
+				               </td><?php }else{?>
+<td></td><?php }?>
+		                          </tr>
+					<?php
+					$no++;
+					endforeach;
+					?>
+		                          </tbody>
+		                      </table>
+	                  	  </div><! --/content-panel -->
+	                  </div><!-- /col-md-12 -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						        <h4 class="modal-title" id="myModalLabel">Instruksi</h4>
+						      </div>
+						      <form action="<?php echo base_url();?>index.php/admin/user/add" method="POST" enctype="multipart/form-data">
+						      <div class="modal-body">
+						        <div class="form-group">
+							      <label class="col-sm-2 col-sm-2 control-label">Pesan</label>
+							      <div class="col-sm-10">
+								 <textarea class="form-control"></textarea>
+							      </div>
+							  </div><br><br><br><br>
+							
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						        <button type="button" class="btn btn-primary">Confirm</button>
+						      </div>
+							</form>
+						    </div>
+						  </div>
+						</div>      	

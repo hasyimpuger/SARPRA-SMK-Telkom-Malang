@@ -1,0 +1,31 @@
+<?php if(!defined('BASEPATH')) exit('No direct script access allowed');
+class M_pengajuan extends CI_Model{  
+ function getAll(){
+  $ambil_data = $this->db->query("SELECT * FROM `view_barang`");
+  //print_r($ambil_data);exit();
+  if ($ambil_data->num_rows() > 0 ){
+   foreach ($ambil_data->result() as $data){
+    $hasil[] = $data;
+   }
+   return $hasil;
+  }
+ }
+
+function confirm($id){   
+  return $this->db->query("UPDATE tbbarang SET STATUS='2' WHERE ID='$id'");
+}
+
+function pengajuan($id){
+  $user = $this->session->userdata('USERNAME');
+  $data = array (
+   'USER' => $user,
+   'TGL_PEMINJAMAN'  => date('Y-m-d'),
+   'VALIDASI'  => "1",
+   'STATUS' => "3",
+   'BARANG' => $id
+  ); 
+//print_r($data);exit();
+  $this->db->insert('tbpeminjaman',$data);
+}
+
+}

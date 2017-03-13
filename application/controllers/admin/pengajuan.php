@@ -1,0 +1,89 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Pengajuan extends CI_Controller {
+	
+    	private $_template = "template";
+
+	function __construct(){  
+        parent::__construct();  
+	$this->load->model('admin/m_pengajuan');
+	$this->load->helper(array('url','form'));
+	}
+
+	public function index()
+	{
+		$this->cek_sesi();
+		$this->load->model('m_login');
+      
+		$user = $this->session->userdata('USERNAME');
+		$nama = $this->session->userdata('NAMA_USER');
+		      
+		$data['level'] = $this->session->userdata('LEVEL');        
+		$data['pengguna'] = $this->m_login->dataPengguna($user, $nama);		
+ 		$data['hasil'] = $this->m_pengajuan->getAll();
+		$data['page'] = 'pengajuan_view';
+  		$this->load->view($this->_template,$data);
+	}
+
+	public function verifikasi()
+	{
+		$this->cek_sesi();
+		$this->load->model('m_login');
+      
+		$user = $this->session->userdata('USERNAME');
+		$nama = $this->session->userdata('NAMA_USER');
+		      
+		$data['level'] = $this->session->userdata('LEVEL');        
+		$data['pengguna'] = $this->m_login->dataPengguna($user, $nama);		
+ 		$data['hasil'] = $this->m_pengajuan->getVerif();
+		$data['page'] = 'pengajuan_verif_view';
+  		$this->load->view($this->_template,$data);
+	}
+
+	function cek_sesi(){
+	    if($this->session->userdata('isLogin') == FALSE)
+	    {
+	      redirect('login/signin');
+	    }else
+	    {
+	    
+	      $this->load->model('m_login');
+	      
+	      $user = $this->session->userdata('USERNAME');
+	      $nama = $this->session->userdata('NAMA_USER');
+	      
+	      $data['level'] = $this->session->userdata('LEVEL');        
+	      $data['pengguna'] = $this->m_login->dataPengguna($user, $nama);
+	    }
+	 }
+
+	function confirm($id){
+		$this->cek_sesi();	
+		$user = $this->session->userdata('USERNAME');
+                $nama = $this->session->userdata('NAMA_USER');
+	      
+	        $data['level'] = $this->session->userdata('LEVEL');        
+	        $data['pengguna'] = $this->m_login->dataPengguna($user, $nama);
+
+		$email = $this->input->post('email');
+		$barang = $this->input->post('nama');
+		$serial = $this->input->post('serial');
+		$tgl = $this->input->post('tgl');
+
+		$subject = "Konfirmasi Peminjaman Barang";
+		$message = "<h1>INFO!</h1><br>Detail barang dipinjam sebagai berikut: <br>1. Nama Barang : ".$barang."<br><br>2. Nomor Serial ".$serial."<br><br>3. Tanggal Peminjaman : ".$tgl."<br><br> Barang tersedia untuk dipinjam, harap menuju SARPRA untuk mengambil barang!";
+
+		$this->m_pengajuan->confirm($id);
+		//memanggil controller smtp
+		require('smtp.php');
+  		$test = new Smtp();
+  		$test->index($email, $subject, $message);
+		//end
+		
+		redirect('admin/pengajuan');
+	}
+
+}
+
+/* End of file welcome.php */
+/* Location: ./application/controllers/welcome.php */

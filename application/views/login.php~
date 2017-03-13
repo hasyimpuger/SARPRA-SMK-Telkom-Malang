@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+    <title>Login</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<?php echo base_url();?>assets/css/bootstrap.css" rel="stylesheet">
+    <!--external css-->
+    <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        
+    <!-- Custom styles for this template -->
+    <link href="<?php echo base_url();?>assets/css/style.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/style-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body onload="disableBackButton();" onpageshow="if(event.persisted) disableBackButton();" onunload="">
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+
+	  <div id="login-page">
+	  	<div class="container">
+	  	      <form action="" method="post" id="form_login" >
+		        <h2 class="form-login-heading">LOGIN</h2>
+		        <div class="login-wrap">
+			<div class="group">
+			    <?php if($this->session->flashdata('status')): ?>
+		            <div class="alert alert-<?php echo $this->session->flashdata('clr');?>" role="alert">
+		                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		                        <span aria-hidden="true">&times;</span>
+		                    </button>
+		                    <?php echo $this->session->flashdata('status');?>
+		                </div>
+		            <?php endif; ?>
+			    </div>
+		            <input type="text" class="form-control" placeholder="Username/NIM" name="username" autofocus>
+		            <br>
+		            <input type="password" class="form-control" placeholder="Password" name="password">
+		            <label class="checkbox">
+		                <span class="pull-right">
+		                </span>
+		            </label>
+		           
+		<button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> LOGIN </button><br>
+		<center><a data-toggle="modal" href="login.html#myModal"> SOP SARPRA </a><center>
+		        </div>
+			</form>
+		
+		          <!-- Modal -->
+		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+				 <form action="<?php echo base_url();?>index.php/login/signin" method="post" > 
+		              <div class="modal-dialog">
+		                  <div class="modal-content">
+		                      <div class="modal-header">
+		                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                          <h4 class="modal-title">SOP Peminjaman Barang</h4>
+		                      </div>
+		                      <div class="modal-body">
+		                          <p>1. Login ke sistem menggunakan akun masing-masing kelas.<br><br>2. Pilih barang yang akan dipinjam melalui menu <b>Data Barang</b> <br><br>3. Kemudian tunggu hingga <b>ADMIN SARPRA</b> mengkonfirmasi pesanan anda. <br><br>3. Apabila telah dikonfirmasi, ikuti instruksi dari <b>SARPRA</b> untuk pemberitahuan lebih lanjut. <br><br>4. Untuk pengembalian barang harap konfirmasi kepada admin <b>SARPRA</b>.</p>
+		                      </div>
+		                      <div class="modal-footer">
+		                          <button class="btn btn-theme" type="button" data-dismiss="modal">Saya Mengerti!</button>
+		                      </div>
+		                  </div>
+		              </div>
+				</form>
+		          </div>
+		          <!-- modal -->
+		
+		      </form>	  	
+	  	
+	  	</div>
+	  </div>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="<?php echo base_url();?>/assets/js/login.js"></script>
+<script type="text/javascript">
+	$("#form_login").submit(function(event) {
+		event.preventDefault();
+		var data 	= $('#form_login').serialize();
+		$("#myerror").html("<ul><li>Checking...</li></ul>");
+		$.ajax({
+			type: "POST",
+			data: data,
+			url: "<?php echo base_url();?>index.php/login/signin",
+			success: function(r) {
+				if (r.log.status == 0) {
+					$('#myerror').html("<ul><li>"+r.log.keterangan+"</li></ul>");
+				} else {
+					$("#myerror").html("<ul><li>"+r.log.keterangan+"</li></ul>");
+					window.location.assign("<?php echo base_url();?>index.php/ujian"); 
+				}
+			}
+		});
+	});
+</script>
+    <script src="<?php echo base_url();?>assets/js/jquery.js"></script>
+    <script src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
+
+    <!--BACKSTRETCH-->
+    <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+    <script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery.backstretch.min.js"></script>
+    <script>
+        $.backstretch("<?php echo base_url();?>assets/img/smktelkommalangedit.jpg", {speed: 500});
+    </script>
+
+
+  </body>
+</html>
